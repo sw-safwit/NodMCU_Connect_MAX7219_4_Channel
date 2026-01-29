@@ -1,0 +1,28 @@
+#include <MD_Parola.h>
+#include <MD_MAX72xx.h>
+#include <SPI.h>
+
+// กำหนดประเภท Hardware เป็น FC16 (ยอดนิยมสำหรับโมดูล 4 ใน 1 แบบในรูป)
+#define HARDWARE_TYPE MD_MAX72XX::FC16_HW
+#define MAX_DEVICES 4 // จำนวนหน้าจอ 4 จอ
+
+#define CS_PIN    D8 
+
+// ประกาศตัวแปรสำหรับควบคุมหน้าจอ
+MD_Parola myDisplay = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
+
+void setup() {
+  myDisplay.begin();             
+  myDisplay.setIntensity(10); // ตั้งความสว่าง (0-15)
+  myDisplay.displayClear();  // ล้างหน้าจอ
+  
+  // ตั้งค่าข้อความ: (ข้อความ, การจัดวาง, ความเร็ว, เวลาหยุด, เอฟเฟกต์เข้า, เอฟเฟกต์ออก)
+  myDisplay.displayText("Hello World!!", PA_CENTER, 100, 0, PA_SCROLL_LEFT, PA_SCROLL_LEFT);
+
+}
+
+void loop() {
+  if (myDisplay.displayAnimate()) {
+    myDisplay.displayReset();    // วนลูปการแสดงผลข้อความ
+  }
+}
